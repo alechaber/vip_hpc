@@ -81,6 +81,7 @@ export JOB_LABEL=${label}
 source ${PROJECT_DIR}/config/config.env
 source ${PROJECT_DIR}/lib/lib.sh
 source ${PROJECT_DIR}/lib/steps.sh
+set_sample "${SAMPLE}"
 
 log_header
 log_job_step "start ${name} (cpus=\${SLURM_CPUS_PER_TASK} mem=\${SLURM_MEM_PER_NODE}M)"
