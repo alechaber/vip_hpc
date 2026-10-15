@@ -1,0 +1,10 @@
+# Data and job output never go in git
+*.bam
+*.bai
+*.vcf.gz
+*.tbi
+*.fastq
+*.fastq.gz
+*.sif
+logs/
+sbatch/
