@@ -169,3 +169,51 @@ step_sweep_haplotypecaller() {
     --native-pair-hmm-threads "${SLURM_CPUS_PER_TASK}" \
     -O "${out}"
 }
+
+# ---------- Assignment 2: many samples ----------
+
+# True when the current sample's final VCF and its index exist. This is the checkpoint.
+sample_is_done() {
+  local vcf=${VCF_DIR}/${SAMPLE}_$(tool_label "${GATK_TOOL}").vcf.gz
+  [ -s "${vcf}" ] && [ -s "${vcf}.tbi" ]
+}
+
+# ApplyBQSR then HaplotypeCaller for the current sample.
+# Each step is checked by hand: "set -e" is switched off inside a function
+# that is called from an if test, so a failure would not stop the second step.
+run_sample() {
+  step_applybqsr "${GATK_TOOL}" || return 1
+  step_haplotypecaller "${GATK_TOOL}" || return 1
+}
+
+# Task 1b: run every sample in SAMPLE_LIST one after another in this single job.
+# A failed sample is recorded and the loop moves on; the job fails at the end if any failed.
+step_loop_samples() {
+  local samples=() name failed=()
+  mapfile -t samples < "${SAMPLE_LIST}"   # not "while read": gatk would eat the list from stdin
+
+  echo "Samples in this job (${#samples[@]}): ${samples[*]}"
+
+  for name in "${samples[@]}"; do
+    set_sample "${name}"
+    log_step "sample ${name}: start"
+
+    if sample_is_done; then
+      log_step "sample ${name}: already done, skipping"
+      continue
+    fi
+
+    if run_sample; then
+      log_step "sample ${name}: finished"
+    else
+      log_step "sample ${name}: FAILED"
+      failed+=("${name}")
+    fi
+  done
+
+  log_step "loop summary: ${#failed[@]} failed out of ${#samples[@]}"
+  if [ "${#failed[@]}" -gt 0 ]; then
+    echo "Failed samples: ${failed[*]}"
+    return 1
+  fi
+}
