@@ -217,3 +217,27 @@ step_loop_samples() {
     return 1
   fi
 }
+
+# Slurm names array logs by job and task number. Add a link named with the sample.
+link_sample_log() {
+  local slurm_log=${LOG_DIR}/${JOB_LABEL}_array_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}.out
+  ln -sf "${slurm_log}" "${LOG_DIR}/${SAMPLE}_array_${SLURM_ARRAY_JOB_ID}.out"
+}
+
+# Task 1c: one array task = one sample. Slurm starts every task as its own job, so a
+# failed sample fails only its own task.
+step_array_sample() {
+  local name
+  name=$(sample_for_task)
+  set_sample "${name}"
+  link_sample_log
+
+  log_step "array task ${SLURM_ARRAY_TASK_ID}: sample ${name} start"
+  if sample_is_done; then
+    log_step "sample ${name}: already done, skipping"
+    return 0
+  fi
+
+  run_sample
+  log_step "sample ${name}: finished"
+}
