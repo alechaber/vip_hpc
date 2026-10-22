@@ -12,6 +12,7 @@
 - `scripts/chain/01_bqsr.sh`: ApplyBQSR as its own job
 - `scripts/chain/02_haplotypecaller.sh`: HaplotypeCaller as its own job
 - `scripts/chain/03_chain.sh`: submits both with `--dependency=afterok`
+- `workflows/`: WDL, Snakemake and Nextflow versions of a 3-step pipeline
 
 ## How to submit
 Run from the repo root.
