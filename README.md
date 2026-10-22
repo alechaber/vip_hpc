@@ -1,3 +1,28 @@
+# Assignment 2: Scaling Workflows and Introduction to Nextflow
+
+## Goals
+- Run many samples with a for loop and with a Slurm job array
+- Split ApplyBQSR and HaplotypeCaller into separate jobs and chain them
+- Compare the same pipeline in WDL, Snakemake and Nextflow
+
+## What's what
+- `scripts/07_duplicate_samples.sh`: copies the Assignment 1 files into sample_01 to sample_10
+- `scripts/08_loop.sh`: one job that loops over all samples
+- `scripts/09_array.sh`: one job array with one task per sample
+- `scripts/chain/01_bqsr.sh`: ApplyBQSR as its own job
+- `scripts/chain/02_haplotypecaller.sh`: HaplotypeCaller as its own job
+- `scripts/chain/03_chain.sh`: submits both with `--dependency=afterok`
+
+## How to submit
+Run from the repo root.
+- `bash scripts/07_duplicate_samples.sh`
+- `bash scripts/08_loop.sh`
+- `bash scripts/09_array.sh`
+- `bash scripts/chain/03_chain.sh sample_01`
+
+## Logs
+Logs and generated job scripts are in `$WORK/logs` and `$WORK/sbatch` on scratch, not in this repo.
+
 # VIP HPC Assignment 1: variant calling three ways
 
 Takes one public sample (SRR622461) through alignment, base-quality recalibration and variant
