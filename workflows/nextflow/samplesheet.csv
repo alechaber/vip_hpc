@@ -1,0 +1,3 @@
+sample,bam,recal_table
+sample_01,/scratch/ah3787/vip_a1/bam/sample_01_dedup.bam,/scratch/ah3787/vip_a1/bam/sample_01_recal.table
+sample_02,/scratch/ah3787/vip_a1/bam/sample_02_dedup.bam,/scratch/ah3787/vip_a1/bam/sample_02_recal.table

@@ -1,0 +1,17 @@
+# config.yaml: everything that can change lives here, not in the Snakefile.
+samples:
+  - sample_01
+  - sample_02
+  - sample_03
+
+bam_dir: /scratch/ah3787/vip_a1/bam
+out_dir: results
+ref_fasta: /scratch/ah3787/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa
+
+gatk_version: 4.7.0.0
+samtools_image: docker://quay.io/biocontainers/samtools:1.20--h50ea8bc_0
+
+bqsr_threads: 2
+haplotypecaller_threads: 4
+bqsr_memory_mb: 6144
+haplotypecaller_memory_mb: 8192
